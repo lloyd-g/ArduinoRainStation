@@ -17,8 +17,8 @@
  adjustable via software
  
   The circuit:
- * LCD RS pin to digital pin 12
- * LCD Enable pin to digital pin 11
+ * LCD RS pin to digital pin 7
+ * LCD Enable pin to digital pin 6
  * LCD R/W pin to Ground 
  * LCD VO pin (pin 3) to PWM pin 9
  * LCD D4 pin to digital pin 5
@@ -32,7 +32,7 @@
 #include <LiquidCrystal.h>
  
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
  
 void setup() {
   // declare pin 9 to be an output:

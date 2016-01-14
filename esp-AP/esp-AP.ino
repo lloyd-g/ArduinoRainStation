@@ -36,6 +36,7 @@ the point is to have it as a web gate way to an Arduino collecting data from tra
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
 
 /* Set these to your desired credentials. */
 const char *ssid = "Weather";
@@ -47,7 +48,34 @@ ESP8266WebServer server(80);
  * connected to this access point to see it.
  */
 void handleRoot() {
-	server.send(200, "text/html", "<h1>You are connected</h1>");
+	// simple message
+	//server.send(200, "text/html", "<h1>You are connected</h1>");
+	//bigger message form advanced webserver example
+		char temp[400];
+	int sec = millis() / 1000;
+	int min = sec / 60;
+	int hr = min / 60;
+
+	snprintf ( temp, 400,
+
+"<html>\
+  <head>\
+    <meta http-equiv='refresh' content='5'/>\
+    <title>ESP8266 Demo</title>\
+    <style>\
+      body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
+    </style>\
+  </head>\
+  <body>\
+    <h1>Hello from ESP8266!</h1>\
+    <p>Uptime: %02d:%02d:%02d</p>\
+  </body>\
+</html>",
+
+		hr, min % 60, sec % 60
+	);
+	server.send ( 200, "text/html", temp );
+	
 }
 
 void setup() {

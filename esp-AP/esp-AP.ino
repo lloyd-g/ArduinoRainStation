@@ -56,6 +56,9 @@ void handleRoot() {
 }
 
 void setup() {
+    // prepare GPIO2
+  pinMode(2, OUTPUT);
+  digitalWrite(2, 0);
 	delay(1000);
 	Serial.begin(115200);
 	Serial.println();
@@ -69,10 +72,12 @@ void setup() {
 	server.on("/", handleRoot);
         server.on ( "/on", []() {
 		server.send ( 200, "text/plain", "this is on" );
-	} );
+	digitalWrite(2, 1);
+} );
         server.on ( "/off", []() {
 		server.send ( 200, "text/plain", "this is off" );
-	} );
+	digitalWrite(2, 0 );
+} );
 	server.begin();
 	Serial.println("HTTP server started");
 }

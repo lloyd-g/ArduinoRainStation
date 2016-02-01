@@ -54,6 +54,34 @@ void handleRoot() {
 	server.send ( 200, "text/html", temp );
 	
 }
+void handleON() {
+	// simple message
+	//server.send(200, "text/html", "<h1>You are connected</h1>");
+	//bigger message form advanced webserver example
+		char temp[400];
+	int sec = millis() / 1000;
+	int min = sec / 60;
+	int hr = min / 60;
+
+	snprintf ( temp, 400,
+
+"<html>\
+  <head>\
+    <meta http-equiv='refresh' content='5'/>\
+    <title>station</title>\
+    <style>\
+      body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
+    </style>\
+  </head>\
+  <body>\
+    <h1>Hello from ESP8266!</h1>\
+   <a href=\"/\">bach</a>\       
+  </body>\
+</html>"
+);
+	server.send ( 200, "text/html", temp );
+	digitalWrite(2, 1);
+}
 
 void setup() {
     // prepare GPIO2
@@ -70,10 +98,7 @@ void setup() {
 	Serial.print("AP IP address: ");
 	Serial.println(myIP);
 	server.on("/", handleRoot);
-        server.on ( "/on", []() {
-		server.send ( 200, "text/plain", "this is on" );
-	digitalWrite(2, 1);
-} );
+        server.on ( "/on", handleON );
         server.on ( "/off", []() {
 		server.send ( 200, "text/plain", "this is off" );
 	digitalWrite(2, 0 );

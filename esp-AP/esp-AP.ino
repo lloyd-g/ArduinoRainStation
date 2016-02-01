@@ -54,24 +54,11 @@ void handleRoot() {
 	server.send ( 200, "text/html", temp );
 	
 }
-void handleON() {
-	// simple message
-	//server.send(200, "text/html", "<h1>You are connected</h1>");
-	//bigger message form advanced webserver example
+void handleOFF() {
 		char temp[400];
-	int sec = millis() / 1000;
-	int min = sec / 60;
-	int hr = min / 60;
-
 	snprintf ( temp, 400,
 
-"<html>\
-  <head>\
-    <meta http-equiv='refresh' content='5'/>\
-    <title>station</title>\
-    <style>\
-      body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
-    </style>\
+"<html><head><meta http-equiv='refresh' content=\"1;url=/ \"/><title>station</title>\ 
   </head>\
   <body>\
     <h1>Hello from ESP8266!</h1>\
@@ -81,6 +68,21 @@ void handleON() {
 );
 	server.send ( 200, "text/html", temp );
 	digitalWrite(2, 1);
+}
+void handleON() {
+		char temp[400];
+	snprintf ( temp, 400,
+
+"<html><head><meta http-equiv='refresh' content=\"1;url=/ \"/><title>station</title>\ 
+  </head>\
+  <body>\
+    <h1>Hello from ESP8266!</h1>\
+   <a href=\"/\">bach</a>\       
+  </body>\
+</html>"
+);
+	server.send ( 200, "text/html", temp );
+	digitalWrite(2, 0);
 }
 
 void setup() {
@@ -99,10 +101,7 @@ void setup() {
 	Serial.println(myIP);
 	server.on("/", handleRoot);
         server.on ( "/on", handleON );
-        server.on ( "/off", []() {
-		server.send ( 200, "text/plain", "this is off" );
-	digitalWrite(2, 0 );
-} );
+       server.on ( "/off", handleOFF );
 	server.begin();
 	Serial.println("HTTP server started");
 }

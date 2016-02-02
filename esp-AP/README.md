@@ -33,4 +33,18 @@ Content-length: 78
 Please follow <a href="http://www.example.com/">this link</a>
 
 ```
-Not sure what is easier with the API give.
+Solution 1 works ok but I could make the redirect page a string contant as it only needs to say OK and bounce back.
+
+next thing I could do is replace links with buttond?
+
+```HTML
+<form method = "get" action = "minimal.cgi">
+<input type="submit">Data: <input name="myfield">
+</form>
+
+```
+but it returns
+
+http://myhost/minimal.cgi?myfield=dddd 
+
+how would "server.on ( "/minimal.cgi", handleButton );" handle the "?myfield=dddd " bit?

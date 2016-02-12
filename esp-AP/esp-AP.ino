@@ -14,75 +14,90 @@ the point is to have it as a web gate way to an Arduino collecting data from tra
 #include <ESP8266mDNS.h>
 
 /* Set these to your desired credentials. */
-const char *ssid = "Weather";
+const char *ssid = "control";
 const char *password = "";
 
 ESP8266WebServer server(80);
-
+int P2State = 0; 
+int P0State = 0;
+int P12State = 0;
+int P13State = 0;
+int P14State = 0;
+int P15State = 0;
+int P16State = 0;
+int sensorPin = A0;    // select the input pin
+int sensorValue = 0;  // variable to store the value coming from the sensor
 /* Just a little test message.  Go to http://192.168.4.1 in a web browser
  * connected to this access point to see it.
  */
 void handleRoot() {
-	// simple message
-	//server.send(200, "text/html", "<h1>You are connected</h1>");
-	//bigger message form advanced webserver example
-		char temp[400];
-	int sec = millis() / 1000;
-	int min = sec / 60;
-	int hr = min / 60;
-
+	char temp[400];
+	P2State = digitalRead(2);
+	P0State = digitalRead(0);
+	P12State = digitalRead(12);
+	P13State = digitalRead(13);
+	P14State = digitalRead(14);
+	P15State = digitalRead(15);
+	P16State = digitalRead(16);
+  sensorValue = analogRead(sensorPin);
+	Serial.print("Reading: ");
+	Serial.println();
 	snprintf ( temp, 400,
 
 "<html>\
   <head>\
     <meta http-equiv='refresh' content='5'/>\
     <title>station</title>\
-    <style>\
-      body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
-    </style>\
   </head>\
   <body>\
-    <h1>Hello from ESP8266!</h1>\
-   <a href=\"/on\">on</a>\ 
-   <a href=\"/off\">off</a>\     
-    <p>Uptime: %02d:%02d:%02d</p>\
+    <h1>Control area</h1>\
+   <h2><a href=\"/onP2\">onP2 </a><a href=\"/offP2\"> offP2</a></h2>\     
+    <h2>P2: %02d</h2>\
+    <h2>P0: %02d</h2>\
+        <h2>P12: %02d</h2>\
+    <h2>P13: %02d</h2>\
+            <h2>P14: %02d</h2>\
+    <h2>P15: %02d</h2>\
+            <h2>P16: %02d</h2>\
+<h2>sensor: %04d</h2>\
   </body>\
-</html>",
+</html>", 
+P2State, P0State, P12State, P13State, P14State, P15State, P16State, sensorValue
 
-		hr, min % 60, sec % 60
+			
 	);
 	server.send ( 200, "text/html", temp );
+	Serial.print("Reading: ");
+	Serial.println();
 	
 }
-void handleOFF() {
-		char temp[400];
+void bouncepage() {
+	char temp[400];
 	snprintf ( temp, 400,
 
-"<html><head><meta http-equiv='refresh' content=\"1;url=/ \"/><title>station</title>\ 
+"<html><head><meta http-equiv='refresh' content=\"0;url=/ \"/><title>station</title>\ 
   </head>\
   <body>\
-    <h1>Hello from ESP8266!</h1>\
+    <h1>OK!</h1>\
    <a href=\"/\">bach</a>\       
   </body>\
 </html>"
 );
 	server.send ( 200, "text/html", temp );
-	digitalWrite(2, 1);
 }
-void handleON() {
-		char temp[400];
-	snprintf ( temp, 400,
 
-"<html><head><meta http-equiv='refresh' content=\"1;url=/ \"/><title>station</title>\ 
-  </head>\
-  <body>\
-    <h1>Hello from ESP8266!</h1>\
-   <a href=\"/\">bach</a>\       
-  </body>\
-</html>"
-);
-	server.send ( 200, "text/html", temp );
+
+void handleOFFP2() {
+        bouncepage();
 	digitalWrite(2, 0);
+	Serial.print("Off: P2 ");
+	Serial.println();
+}
+void handleONP2() {
+        bouncepage();
+	digitalWrite(2, 1);
+	Serial.print("On: P2 ");
+	Serial.println();
 }
 
 void setup() {
@@ -100,8 +115,8 @@ void setup() {
 	Serial.print("AP IP address: ");
 	Serial.println(myIP);
 	server.on("/", handleRoot);
-        server.on ( "/on", handleON );
-       server.on ( "/off", handleOFF );
+        server.on ( "/onP2", handleONP2 );
+       server.on ( "/offP2", handleOFFP2 );
 	server.begin();
 	Serial.println("HTTP server started");
 }

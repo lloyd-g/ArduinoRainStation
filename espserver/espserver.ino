@@ -18,6 +18,8 @@ const char *ssid = "Data";
 const char *password = "";
 
 ESP8266WebServer server(80);
+int inByte = 0;         // incoming serial byte
+String inData;
 int P2State = 0; 
 int P0State = 0;
 int P12State = 0;
@@ -43,6 +45,14 @@ void handleRoot() {
   // RQ sent to Arduino to ask for data.
 	Serial.print("RQ.");
 	// add test to respont to Arduino data.
+	inData="";
+	while (Serial.available() == 0);
+int h=Serial.available();  // data length
+// read to string byte at time
+for (int i=0;i<h;i++){
+              inData += (char)Serial.read();
+          }
+
 	// and put on page
 	snprintf ( temp, 400,
 
@@ -61,9 +71,10 @@ void handleRoot() {
     <h2>P15: %02d</h2>\
     <h2>P16: %02d</h2>\
 <h2>sensor: %04d</h2>\
+<h2>data: %s</h2>\
   </body>\
 </html>", 
-P2State, P0State, P12State, P13State, P14State, P15State, P16State, sensorValue
+P2State, P0State, P12State, P13State, P14State, P15State, P16State, sensorValue, inData
 
 			
 	);

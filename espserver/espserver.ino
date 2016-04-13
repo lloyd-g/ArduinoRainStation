@@ -43,7 +43,7 @@ void handleRoot() {
 	P16State = digitalRead(16);
   sensorValue = analogRead(sensorPin);
   // RQ sent to Arduino to ask for data.
-	Serial.print("RQ.");
+	Serial.print("Q");
 	// add test to respont to Arduino data.
 	inData="";
 	while (Serial.available() == 0);

@@ -58,7 +58,7 @@ for (int i=0;i<h;i++){
 
 "<html>\
   <head>\
-    <meta http-equiv='refresh' content='5'/>\
+    <meta http-equiv='refresh' content='10'/>\
     <title>station</title>\
   </head>\
   <body>\

@@ -1,11 +1,5 @@
 /**
- * Serial Duplex 
- * by Tom Igoe. 
- * 
- * Sends a byte out the serial port when you type a key
- * listens for bytes received, and displays their value. 
- * This is just a quick application for testing serial data
- * in both directions. 
+
  */
 
 
@@ -24,23 +18,29 @@ void setup() {
   // List all the available serial ports:
   printArray(Serial.list());
 
-  // is always my  ARDUINO USBtty0, so I open Serial.list()[32].
-  // Open whatever port is the one you're using.
+  // is my  ARDUINO USBtty0, so I open Serial.list()[32].
+  // Open whatever port is the one you're using. list is show in console
   String portName = Serial.list()[32];
   myPort = new Serial(this, portName, 115200);
 }
 
 void draw() {
   background(0);
-  char c = char(inByte);
-    text(c, 10, 160);
+ 
 
-  text("Last Received: " + inByte, 10, 130);
+  text("Last Received: " + inBuffer, 10, 130);
   text("Last Sent: " + whichKey, 10, 100);
 }
 
 void serialEvent(Serial myPort) {
-  inByte = myPort.read();
+  //inByte = myPort.read();
+   while (myPort.available() > 0) {
+    String inBuffer = myPort.readString();   
+    if (inBuffer != null) {
+      println(inBuffer);
+    }
+  }
+
 }
 
 void keyPressed() {

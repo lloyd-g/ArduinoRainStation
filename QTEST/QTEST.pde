@@ -31,7 +31,7 @@ void draw() {
  
 
   text(inBuffer, 10, 130);
-  text("Last Sent: " + whichKey, 10, 100);
+  text("Last Sent: " + whichKey, 10, 10);
 }
 
 void serialEvent(Serial myPort) {

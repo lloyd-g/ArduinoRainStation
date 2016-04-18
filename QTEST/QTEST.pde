@@ -8,6 +8,7 @@ import processing.serial.*;
 Serial myPort;      // The serial port
 int whichKey = -1;  // Variable to hold keystoke values
 int inByte = -1;    // Incoming serial data
+String inBuffer = "";
 
 void setup() {
   size(400, 300);
@@ -22,22 +23,23 @@ void setup() {
   // Open whatever port is the one you're using. list is show in console
   String portName = Serial.list()[32];
   myPort = new Serial(this, portName, 115200);
+  
 }
 
 void draw() {
   background(0);
  
 
-  text("Last Received: " + inBuffer, 10, 130);
+  text(inBuffer, 10, 130);
   text("Last Sent: " + whichKey, 10, 100);
 }
 
 void serialEvent(Serial myPort) {
   //inByte = myPort.read();
-   while (myPort.available() > 0) {
-    String inBuffer = myPort.readString();   
+   if(myPort.available() > 0) {
+    inBuffer = myPort.readStringUntil(10);  
     if (inBuffer != null) {
-      println(inBuffer);
+      print(inBuffer);
     }
   }
 

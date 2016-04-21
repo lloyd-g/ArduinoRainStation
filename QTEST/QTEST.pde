@@ -28,10 +28,8 @@ void setup() {
 
 void draw() {
   background(0);
- 
-
-  text(inBuffer, 10, 130);
-  text("Last Sent: " + whichKey, 10, 10);
+ text("Last Sent: " + whichKey, 10, 10);
+ text("Last recieved: " + inBuffer, 10, 30);
 }
 
 void serialEvent(Serial myPort) {

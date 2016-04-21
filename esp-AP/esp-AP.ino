@@ -16,7 +16,7 @@ the point is to have it as a web gate way to an Arduino collecting data from tra
 /* Set these to your desired credentials. */
 const char *ssid = "control";
 const char *password = "";
-
+ADC_MODE(ADC_VCC);
 ESP8266WebServer server(80);
 int P2State = 0; 
 int P0State = 0;
@@ -39,7 +39,7 @@ void handleRoot() {
 	P14State = digitalRead(14);
 	P15State = digitalRead(15);
 	P16State = digitalRead(16);
-  sensorValue = analogRead(sensorPin);
+  sensorValue = ESP.getVcc();
 	Serial.print("Reading: ");
 	Serial.println();
 	snprintf ( temp, 400,
@@ -50,16 +50,16 @@ void handleRoot() {
     <title>station</title>\
   </head>\
   <body>\
-    <h1>Control area</h1>\
+    <h1>control server</h1>\
    <h2><a href=\"/onP2\">onP2 </a><a href=\"/offP2\"> offP2</a></h2>\     
     <h2>P2: %02d</h2>\
     <h2>P0: %02d</h2>\
-        <h2>P12: %02d</h2>\
+    <h2>P12: %02d</h2>\
     <h2>P13: %02d</h2>\
-            <h2>P14: %02d</h2>\
+    <h2>P14: %02d</h2>\
     <h2>P15: %02d</h2>\
             <h2>P16: %02d</h2>\
-<h2>sensor: %04d</h2>\
+<h2>supply: %04d mV</h2>\
   </body>\
 </html>", 
 P2State, P0State, P12State, P13State, P14State, P15State, P16State, sensorValue
@@ -101,6 +101,7 @@ void handleONP2() {
 }
 
 void setup() {
+ // ADC_MODE(ADC_VCC);
     // prepare GPIO2
   pinMode(2, OUTPUT);
   digitalWrite(2, 0);
